@@ -53,9 +53,8 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer',
 
 # Model
 print('==> Building model..')
-net = AlexNet()
 # net = VGG('VGG19')
-# net = ResNet18()
+net = ResNet18()
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
@@ -102,7 +101,8 @@ def train(epoch):
         optimizer.step()
 
         train_loss += loss.item()
-        _, predicted = outputs.max(1)
+        # _, predicted = outputs.max(1)
+        predicted = flow.argmax(outputs, 1).to(flow.int64)
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
 
@@ -123,7 +123,8 @@ def test(epoch):
             loss = criterion(outputs, targets)
 
             test_loss += loss.item()
-            _, predicted = outputs.max(1)
+            # _, predicted = outputs.max(1)
+            predicted = flow.argmax(outputs, 1).to(flow.int64)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
