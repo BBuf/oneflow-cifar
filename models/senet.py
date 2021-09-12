@@ -1,10 +1,10 @@
-'''SENet in PyTorch.
+'''SENet in OneFlow.
 
 SENet is the winner of ImageNet-2017. The paper is not released yet.
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class BasicBlock(nn.Module):
@@ -115,7 +115,7 @@ def SENet18():
 
 def test():
     net = SENet18()
-    y = net(torch.randn(1,3,32,32))
+    y = net(oneflow.randn(1,3,32,32))
     print(y.size())
 
 # test()

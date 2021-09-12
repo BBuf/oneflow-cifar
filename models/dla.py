@@ -1,11 +1,11 @@
-'''DLA in PyTorch.
+'''DLA in OneFlow.
 
 Reference:
     Deep Layer Aggregation. https://arxiv.org/abs/1707.06484
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow as flow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class BasicBlock(nn.Module):
@@ -45,7 +45,7 @@ class Root(nn.Module):
         self.bn = nn.BatchNorm2d(out_channels)
 
     def forward(self, xs):
-        x = torch.cat(xs, 1)
+        x = flow.cat(xs, 1)
         out = F.relu(self.bn(self.conv(x)))
         return out
 
@@ -126,7 +126,7 @@ class DLA(nn.Module):
 def test():
     net = DLA()
     print(net)
-    x = torch.randn(1, 3, 32, 32)
+    x = flow.randn(1, 3, 32, 32)
     y = net(x)
     print(y.size())
 

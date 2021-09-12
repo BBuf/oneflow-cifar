@@ -1,7 +1,7 @@
-'''Dual Path Networks in PyTorch.'''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+'''Dual Path Networks in OneFlow.'''
+import oneflow as flow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class Bottleneck(nn.Module):
@@ -30,7 +30,7 @@ class Bottleneck(nn.Module):
         out = self.bn3(self.conv3(out))
         x = self.shortcut(x)
         d = self.out_planes
-        out = torch.cat([x[:,:d,:,:]+out[:,:d,:,:], x[:,d:,:,:], out[:,d:,:,:]], 1)
+        out = flow.cat([x[:,:d,:,:]+out[:,:d,:,:], x[:,d:,:,:], out[:,d:,:,:]], 1)
         out = F.relu(out)
         return out
 
@@ -91,7 +91,7 @@ def DPN92():
 
 def test():
     net = DPN92()
-    x = torch.randn(1,3,32,32)
+    x = flow.randn(1,3,32,32)
     y = net(x)
     print(y)
 

@@ -1,11 +1,11 @@
-'''MobileNetV2 in PyTorch.
+'''MobileNetV2 in OneFlow.
 
 See the paper "Inverted Residuals and Linear Bottlenecks:
 Mobile Networks for Classification, Detection and Segmentation" for more details.
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class Block(nn.Module):
@@ -79,7 +79,7 @@ class MobileNetV2(nn.Module):
 
 def test():
     net = MobileNetV2()
-    x = torch.randn(2,3,32,32)
+    x = oneflow.randn(2,3,32,32)
     y = net(x)
     print(y.size())
 

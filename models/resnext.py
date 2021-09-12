@@ -1,10 +1,10 @@
-'''ResNeXt in PyTorch.
+'''ResNeXt in OneFlow.
 
 See the paper "Aggregated Residual Transformations for Deep Neural Networks" for more details.
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class Block(nn.Module):
@@ -88,7 +88,7 @@ def ResNeXt29_32x4d():
 
 def test_resnext():
     net = ResNeXt29_2x64d()
-    x = torch.randn(1,3,32,32)
+    x = oneflow.randn(1,3,32,32)
     y = net(x)
     print(y.size())
 

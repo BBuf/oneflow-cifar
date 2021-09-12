@@ -1,10 +1,10 @@
-'''ShuffleNet in PyTorch.
+'''ShuffleNet in OneFlow.
 
 See the paper "ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices" for more details.
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class ShuffleBlock(nn.Module):
@@ -24,7 +24,7 @@ class Bottleneck(nn.Module):
         super(Bottleneck, self).__init__()
         self.stride = stride
 
-        mid_planes = out_planes/4
+        mid_planes = out_planes // 4
         g = 1 if in_planes==24 else groups
         self.conv1 = nn.Conv2d(in_planes, mid_planes, kernel_size=1, groups=g, bias=False)
         self.bn1 = nn.BatchNorm2d(mid_planes)
@@ -44,7 +44,7 @@ class Bottleneck(nn.Module):
         out = F.relu(self.bn2(self.conv2(out)))
         out = self.bn3(self.conv3(out))
         res = self.shortcut(x)
-        out = F.relu(torch.cat([out,res], 1)) if self.stride==2 else F.relu(out+res)
+        out = F.relu(oneflow.cat([out,res], 1)) if self.stride==2 else F.relu(out+res)
         return out
 
 
@@ -102,7 +102,7 @@ def ShuffleNetG3():
 
 def test():
     net = ShuffleNetG2()
-    x = torch.randn(1,3,32,32)
+    x = oneflow.randn(1,3,32,32)
     y = net(x)
     print(y)
 

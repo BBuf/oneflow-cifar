@@ -1,12 +1,12 @@
-'''RegNet in PyTorch.
+'''RegNet in OneFlow.
 
 Paper: "Designing Network Design Spaces".
 
 Reference: https://github.com/keras-team/keras-applications/blob/master/keras_applications/efficientnet.py
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class SE(nn.Module):
@@ -146,7 +146,7 @@ def RegNetY_400MF():
 def test():
     net = RegNetX_200MF()
     print(net)
-    x = torch.randn(2, 3, 32, 32)
+    x = oneflow.randn(2, 3, 32, 32)
     y = net(x)
     print(y.shape)
 

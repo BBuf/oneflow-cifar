@@ -33,6 +33,10 @@ python main.py --resume --lr=0.01
 | [DPN92](https://arxiv.org/abs/1707.01629)             |       |
 | [DLA](https://arxiv.org/pdf/1707.06484.pdf)           |       |
 
+## Reference
+- https://github.com/kuangliu/pytorch-cifar
 ## TODO
 
-add ddp.
+add ddp train.
+
+

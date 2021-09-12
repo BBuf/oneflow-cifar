@@ -1,6 +1,6 @@
-'''VGG11/13/16/19 in Pytorch.'''
-import torch
-import torch.nn as nn
+'''VGG11/13/16/19 in OneFlow.'''
+import oneflow
+import oneflow.nn as nn
 
 
 cfg = {
@@ -40,7 +40,7 @@ class VGG(nn.Module):
 
 def test():
     net = VGG('VGG11')
-    x = torch.randn(2,3,32,32)
+    x = oneflow.randn(2,3,32,32)
     y = net(x)
     print(y.size())
 

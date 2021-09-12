@@ -1,10 +1,10 @@
-'''PNASNet in PyTorch.
+'''PNASNet in OneFlow.
 
 Paper: Progressive Neural Architecture Search
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class SepConv(nn.Module):
@@ -65,7 +65,7 @@ class CellB(nn.Module):
         # Concat & reduce channels
         b1 = F.relu(y1+y2)
         b2 = F.relu(y3+y4)
-        y = torch.cat([b1,b2], 1)
+        y = oneflow.cat([b1,b2], 1)
         return F.relu(self.bn2(self.conv2(y)))
 
 class PNASNet(nn.Module):
@@ -118,7 +118,7 @@ def PNASNetB():
 
 def test():
     net = PNASNetB()
-    x = torch.randn(1,3,32,32)
+    x = oneflow.randn(1,3,32,32)
     y = net(x)
     print(y)
 

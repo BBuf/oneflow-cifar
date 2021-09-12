@@ -1,6 +1,6 @@
-'''LeNet in PyTorch.'''
-import torch.nn as nn
-import torch.nn.functional as F
+'''LeNet in OneFlow.'''
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 class LeNet(nn.Module):
     def __init__(self):

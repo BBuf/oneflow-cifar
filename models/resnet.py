@@ -1,4 +1,4 @@
-'''ResNet in PyTorch.
+'''ResNet in OneFlow.
 
 For Pre-activation ResNet, see 'preact_resnet.py'.
 
@@ -6,9 +6,9 @@ Reference:
 [1] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
     Deep Residual Learning for Image Recognition. arXiv:1512.03385
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class BasicBlock(nn.Module):
@@ -126,7 +126,7 @@ def ResNet152():
 
 def test():
     net = ResNet18()
-    y = net(torch.randn(1, 3, 32, 32))
+    y = net(oneflow.randn(1, 3, 32, 32))
     print(y.size())
 
 # test()

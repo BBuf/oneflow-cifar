@@ -1,12 +1,12 @@
-'''EfficientNet in PyTorch.
+'''EfficientNet in OneFlow.
 
 Paper: "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks".
 
 Reference: https://github.com/keras-team/keras-applications/blob/master/keras_applications/efficientnet.py
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 def swish(x):
@@ -15,7 +15,7 @@ def swish(x):
 
 def drop_connect(x, drop_ratio):
     keep_ratio = 1.0 - drop_ratio
-    mask = torch.empty([x.shape[0], 1, 1, 1], dtype=x.dtype, device=x.device)
+    mask = oneflow.empty([x.shape[0], 1, 1, 1], dtype=x.dtype, device=x.device)
     mask.bernoulli_(keep_ratio)
     x.div_(keep_ratio)
     x.mul_(mask)
@@ -166,7 +166,7 @@ def EfficientNetB0():
 
 def test():
     net = EfficientNetB0()
-    x = torch.randn(2, 3, 32, 32)
+    x = oneflow.randn(2, 3, 32, 32)
     y = net(x)
     print(y.shape)
 

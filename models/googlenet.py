@@ -1,7 +1,7 @@
-'''GoogLeNet with PyTorch.'''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+'''GoogLeNet with OneFlow.'''
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class Inception(nn.Module):
@@ -50,7 +50,7 @@ class Inception(nn.Module):
         y2 = self.b2(x)
         y3 = self.b3(x)
         y4 = self.b4(x)
-        return torch.cat([y1,y2,y3,y4], 1)
+        return oneflow.cat([y1,y2,y3,y4], 1)
 
 
 class GoogLeNet(nn.Module):
@@ -100,7 +100,7 @@ class GoogLeNet(nn.Module):
 
 def test():
     net = GoogLeNet()
-    x = torch.randn(1,3,32,32)
+    x = oneflow.randn(1,3,32,32)
     y = net(x)
     print(y.size())
 

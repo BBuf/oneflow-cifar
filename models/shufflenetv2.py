@@ -1,10 +1,10 @@
-'''ShuffleNetV2 in PyTorch.
+'''ShuffleNetV2 in OneFlow.
 
 See the paper "ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design" for more details.
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class ShuffleBlock(nn.Module):
@@ -50,7 +50,7 @@ class BasicBlock(nn.Module):
         out = F.relu(self.bn1(self.conv1(x2)))
         out = self.bn2(self.conv2(out))
         out = F.relu(self.bn3(self.conv3(out)))
-        out = torch.cat([x1, out], 1)
+        out = oneflow.cat([x1, out], 1)
         out = self.shuffle(out)
         return out
 
@@ -88,7 +88,7 @@ class DownBlock(nn.Module):
         out2 = self.bn4(self.conv4(out2))
         out2 = F.relu(self.bn5(self.conv5(out2)))
         # concat
-        out = torch.cat([out1, out2], 1)
+        out = oneflow.cat([out1, out2], 1)
         out = self.shuffle(out)
         return out
 
@@ -154,7 +154,7 @@ configs = {
 
 def test():
     net = ShuffleNetV2(net_size=0.5)
-    x = torch.randn(3, 3, 32, 32)
+    x = oneflow.randn(3, 3, 32, 32)
     y = net(x)
     print(y.shape)
 

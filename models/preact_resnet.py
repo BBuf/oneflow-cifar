@@ -1,12 +1,12 @@
-'''Pre-activation ResNet in PyTorch.
+'''Pre-activation ResNet in OneFlow.
 
 Reference:
 [1] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
     Identity Mappings in Deep Residual Networks. arXiv:1603.05027
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class PreActBlock(nn.Module):
@@ -112,7 +112,7 @@ def PreActResNet152():
 
 def test():
     net = PreActResNet18()
-    y = net((torch.randn(1,3,32,32)))
+    y = net((oneflow.randn(1,3,32,32)))
     print(y.size())
 
 # test()

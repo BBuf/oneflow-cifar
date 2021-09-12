@@ -1,11 +1,11 @@
-'''MobileNet in PyTorch.
+'''MobileNet in OneFlow.
 
 See the paper "MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications"
 for more details.
 '''
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
 
 class Block(nn.Module):
@@ -54,7 +54,7 @@ class MobileNet(nn.Module):
 
 def test():
     net = MobileNet()
-    x = torch.randn(1,3,32,32)
+    x = oneflow.randn(1,3,32,32)
     y = net(x)
     print(y.size())
 
