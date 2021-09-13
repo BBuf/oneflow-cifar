@@ -4,6 +4,7 @@ import oneflow.nn as nn
 import oneflow.optim as optim
 import oneflow.nn.functional as F
 import oneflow.backends.cudnn as cudnn
+from oneflow.fx.passes.quantization import *
 
 import oneflow.utils.vision.transforms as transforms
 
@@ -53,6 +54,8 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer',
 
 # Model
 print('==> Building model..')
+
+# net = AlexNet()
 # net = VGG('VGG19')
 net = ResNet18()
 # net = PreActResNet18()
@@ -68,7 +71,12 @@ net = ResNet18()
 # net = EfficientNetB0()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
+# net = net.to(device)
+
+gm: flow.fx.GraphModule = flow.fx.symbolic_trace(net)
+net = qat(gm, flow.randn(1, 3, 32, 32))
 net = net.to(device)
+print(net)
 
 if args.resume:
     # Load checkpoint.
