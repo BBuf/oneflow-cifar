@@ -4,7 +4,7 @@ import oneflow.nn as nn
 import oneflow.optim as optim
 import oneflow.nn.functional as F
 import oneflow.backends.cudnn as cudnn
-from oneflow.fx.passes.quantization import *
+from oneflow.fx.passes.quantization import quantization_aware_training
 
 import oneflow.utils.vision.transforms as transforms
 
@@ -74,9 +74,8 @@ net = ResNet18()
 # net = net.to(device)
 
 gm: flow.fx.GraphModule = flow.fx.symbolic_trace(net)
-net = qat(gm, flow.randn(1, 3, 32, 32))
+net = quantization_aware_training(gm, flow.randn(1, 3, 32, 32), {})
 net = net.to(device)
-print(net)
 
 if args.resume:
     # Load checkpoint.
