@@ -55,6 +55,9 @@ python main_qat.py
 python main_qat.py --resume --lr=0.01
 ```
 
+Note:
+
+The `momentum` parameter in the `MovingAverageMinMaxObserver` class defaults to 0.95, which will not be changed in the following experiments. 
 ## Accuracy
 | Model             | quantization_bit | quantization_scheme | quantization_formula | per_layer_quantization | Acc |
 | ----------------- | ----------- | ----------- | ----------- | ----------- | ----------- |
