@@ -41,12 +41,12 @@ transform_test = transforms.Compose([
 trainset = flow.utils.vision.datasets.CIFAR10(
     root='./data', train=True, download=True, transform=transform_train)
 trainloader = flow.utils.data.DataLoader(
-    trainset, batch_size=128, shuffle=True, num_workers=2)
+    trainset, batch_size=1024, shuffle=True, num_workers=2)
 
 testset = flow.utils.vision.datasets.CIFAR10(
     root='./data', train=False, download=True, transform=transform_test)
 testloader = flow.utils.data.DataLoader(
-    testset, batch_size=100, shuffle=False, num_workers=2)
+    testset, batch_size=1024, shuffle=False, num_workers=2)
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
@@ -84,6 +84,13 @@ optimizer = optim.SGD(net.parameters(), lr=args.lr,
                       momentum=0.9, weight_decay=5e-4)
 scheduler = flow.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
+def calc_correct_num(preds, labels):
+    correct_of = 0.0
+    for pred, label in zip(preds, labels):
+        correct_of += (pred == label).sum()
+
+    return correct_of
+
 
 # Training
 def train(epoch):
@@ -104,10 +111,12 @@ def train(epoch):
         # _, predicted = outputs.max(1)
         predicted = flow.argmax(outputs, 1).to(flow.int64)
         total += targets.size(0)
-        correct += predicted.eq(targets).sum().item()
+
+        correct += predicted.eq(targets).to(flow.int32).sum().item()
 
         progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+
 
 
 def test(epoch):
@@ -124,9 +133,11 @@ def test(epoch):
 
             test_loss += loss.item()
             # _, predicted = outputs.max(1)
-            predicted = flow.argmax(outputs, 1).to(flow.int64)
+            predicted = flow.argmax(outputs, 1)
             total += targets.size(0)
-            correct += predicted.eq(targets).sum().item()
+
+            
+            correct += predicted.eq(targets).to(flow.int32).sum().item()
 
             progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
