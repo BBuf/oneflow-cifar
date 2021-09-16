@@ -6,7 +6,10 @@ import oneflow.nn.functional as F
 import oneflow.backends.cudnn as cudnn
 from oneflow.fx.passes.quantization import quantization_aware_training
 
-import oneflow.utils.vision.transforms as transforms
+# import oneflow.utils.vision.transforms as transforms
+import torch
+import torchvision
+import torchvision.transforms as transforms
 
 import os
 import argparse
@@ -26,6 +29,29 @@ best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 
 # Data
+# print('==> Preparing data..')
+# transform_train = transforms.Compose([
+#     transforms.RandomCrop(32, padding=4),
+#     transforms.RandomHorizontalFlip(),
+#     transforms.ToTensor(),
+#     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+# ])
+
+# transform_test = transforms.Compose([
+#     transforms.ToTensor(),
+#     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+# ])
+
+# trainset = flow.utils.vision.datasets.CIFAR10(
+#     root='./data', train=True, download=True, transform=transform_train)
+# trainloader = flow.utils.data.DataLoader(
+#     trainset, batch_size=128, shuffle=True, num_workers=2)
+
+# testset = flow.utils.vision.datasets.CIFAR10(
+#     root='./data', train=False, download=True, transform=transform_test)
+# testloader = flow.utils.data.DataLoader(
+#     testset, batch_size=100, shuffle=False, num_workers=2)
+# Data
 print('==> Preparing data..')
 transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
@@ -39,15 +65,16 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
-trainset = flow.utils.vision.datasets.CIFAR10(
+trainset = torchvision.datasets.CIFAR10(
     root='./data', train=True, download=True, transform=transform_train)
-trainloader = flow.utils.data.DataLoader(
+trainloader = torch.utils.data.DataLoader(
     trainset, batch_size=128, shuffle=True, num_workers=2)
 
-testset = flow.utils.vision.datasets.CIFAR10(
+testset = torchvision.datasets.CIFAR10(
     root='./data', train=False, download=True, transform=transform_test)
-testloader = flow.utils.data.DataLoader(
+testloader = torch.utils.data.DataLoader(
     testset, batch_size=100, shuffle=False, num_workers=2)
+
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
@@ -107,8 +134,9 @@ def train(epoch):
     train_loss = 0
     correct = 0
     total = 0
-    for batch_idx, (inputs, targets) in enumerate(trainloader):
-        inputs, targets = inputs.to(device), targets.to(device)
+    for batch_idx, (torch_inputs, torch_targets) in enumerate(trainloader):
+        inputs = flow.tensor(torch_inputs.numpy(), requires_grad=True)
+        targets = flow.tensor(torch_targets.numpy(), requires_grad=True)
         optimizer.zero_grad()
         outputs = net(inputs)
         loss = criterion(outputs, targets)
@@ -132,8 +160,9 @@ def test(epoch):
     correct = 0
     total = 0
     with flow.no_grad():
-        for batch_idx, (inputs, targets) in enumerate(testloader):
-            inputs, targets = inputs.to(device), targets.to(device)
+        for batch_idx, (torch_inputs, torch_targets) in enumerate(testloader):
+            inputs = flow.tensor(torch_inputs.numpy())
+            targets = flow.tensor(torch_targets.numpy())
             outputs = net(inputs)
             loss = criterion(outputs, targets)
 

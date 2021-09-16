@@ -10,7 +10,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
-
 import os
 import argparse
 
@@ -68,12 +67,12 @@ transform_test = transforms.Compose([
 trainset = torchvision.datasets.CIFAR10(
     root='./data', train=True, download=True, transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
-    trainset, batch_size=128, shuffle=True, num_workers=2)
+    trainset, batch_size=128, shuffle=True, num_workers=2, drop_last=True)
 
 testset = torchvision.datasets.CIFAR10(
     root='./data', train=False, download=True, transform=transform_test)
 testloader = torch.utils.data.DataLoader(
-    testset, batch_size=100, shuffle=False, num_workers=2)
+    testset, batch_size=100, shuffle=False, num_workers=2, drop_last=True)
 
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
@@ -97,6 +96,7 @@ net = ResNet18()
 # net = RegNetX_200MF()
 # net = SimpleDLA()
 net = net.to(device)
+net.train()
 
 if args.resume:
     # Load checkpoint.
@@ -112,13 +112,33 @@ optimizer = optim.SGD(net.parameters(), lr=args.lr,
                       momentum=0.9, weight_decay=5e-4)
 scheduler = flow.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
-def calc_correct_num(preds, labels):
-    correct_of = 0.0
-    for pred, label in zip(preds, labels):
-        correct_of += (pred == label).sum()
 
-    return correct_of
+class ResNet18TrainGraph(flow.nn.Graph):
+    def __init__(self):
+        super().__init__()
+        self.model = net
+        self.loss_fn = criterion
+        self.add_optimizer(optimizer, lr_sch=scheduler)
+    
+    def build(self, x, y):
+        y_pred = self.model(x)
+        loss = self.loss_fn(y_pred, y)
+        loss.backward()
+        return loss, y_pred
 
+class ResNet18EvalGraph(flow.nn.Graph):
+    def __init__(self):
+        super().__init__()
+        self.model = net
+        self.loss_fn = criterion
+    
+    def build(self, x, y):
+        y_pred = self.model(x)
+        loss = self.loss_fn(y_pred, y)
+        return loss, y_pred
+
+resnet18_train_graph = ResNet18TrainGraph()
+resnet18_eval_graph = ResNet18EvalGraph()
 
 # Training
 def train(epoch):
@@ -131,11 +151,9 @@ def train(epoch):
         inputs = flow.tensor(torch_inputs.numpy(), requires_grad=True)
         targets = flow.tensor(torch_targets.numpy(), requires_grad=True)
         inputs, targets = inputs.to(device), targets.to(device)
-        optimizer.zero_grad()
-        outputs = net(inputs)
-        loss = criterion(outputs, targets)
-        loss.backward()
-        optimizer.step()
+        # optimizer.zero_grad()
+        # outputs = net(inputs)
+        loss, outputs = resnet18_train_graph(inputs, targets)
 
         train_loss += loss.item()
         # _, predicted = outputs.max(1)
@@ -160,8 +178,8 @@ def test(epoch):
             inputs = flow.tensor(torch_inputs.numpy())
             targets = flow.tensor(torch_targets.numpy())
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs = net(inputs)
-            loss = criterion(outputs, targets)
+            loss, outputs = resnet18_eval_graph(inputs, targets)
+            # loss = criterion(outputs, targets)
 
             test_loss += loss.item()
             # _, predicted = outputs.max(1)
@@ -178,18 +196,9 @@ def test(epoch):
     acc = 100.*correct/total
     if acc > best_acc:
         print('Saving..')
-        # state = {
-        #     'net': net.state_dict(),
-        #     'acc': acc,
-        #     'epoch': epoch,
-        # }
-        # if not os.path.isdir('checkpoint'):
-        #     os.mkdir('checkpoint')
-        # flow.save(state, './checkpoint')
         best_acc = acc
 
 
 for epoch in range(start_epoch, start_epoch+200):
     train(epoch)
     test(epoch)
-    scheduler.step()
