@@ -18,7 +18,7 @@ python main.py --resume --lr=0.01
 ## Accuracy
 | Model             | Acc.        |
 | ----------------- | ----------- |
-| [VGG16](https://arxiv.org/abs/1409.1556)              |       |
+| [VGG16](https://arxiv.org/abs/1409.1556)              | 93.92%|
 | [ResNet18](https://arxiv.org/abs/1512.03385)          | 95.62%|
 | [ResNet50](https://arxiv.org/abs/1512.03385)          |       |
 | [ResNet101](https://arxiv.org/abs/1512.03385)         |       |
