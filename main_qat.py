@@ -68,12 +68,12 @@ transform_test = transforms.Compose([
 trainset = torchvision.datasets.CIFAR10(
     root='./data', train=True, download=True, transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
-    trainset, batch_size=128, shuffle=True, num_workers=2)
+    trainset, batch_size=128, shuffle=True, num_workers=2, drop_last=True)
 
 testset = torchvision.datasets.CIFAR10(
     root='./data', train=False, download=True, transform=transform_test)
 testloader = torch.utils.data.DataLoader(
-    testset, batch_size=100, shuffle=False, num_workers=2)
+    testset, batch_size=100, shuffle=False, num_workers=2, drop_last=True)
 
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
@@ -111,6 +111,7 @@ qconfig = {
 
 net = quantization_aware_training(gm, flow.randn(1, 3, 32, 32), qconfig)
 net = net.to(device)
+print(net)
 
 if args.resume:
     # Load checkpoint.
@@ -137,6 +138,7 @@ def train(epoch):
     for batch_idx, (torch_inputs, torch_targets) in enumerate(trainloader):
         inputs = flow.tensor(torch_inputs.numpy(), requires_grad=True)
         targets = flow.tensor(torch_targets.numpy(), requires_grad=True)
+        inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = net(inputs)
         loss = criterion(outputs, targets)
@@ -163,6 +165,7 @@ def test(epoch):
         for batch_idx, (torch_inputs, torch_targets) in enumerate(testloader):
             inputs = flow.tensor(torch_inputs.numpy())
             targets = flow.tensor(torch_targets.numpy())
+            inputs, targets = inputs.to(device), targets.to(device)
             outputs = net(inputs)
             loss = criterion(outputs, targets)
 
@@ -187,6 +190,7 @@ def test(epoch):
         # if not os.path.isdir('checkpoint'):
         #     os.mkdir('checkpoint')
         # flow.save(state, './checkpoint')
+        # flow.save(net.state_dict(), './checkpoint')
         best_acc = acc
 
 
