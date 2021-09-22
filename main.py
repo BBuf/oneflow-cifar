@@ -132,8 +132,8 @@ def train(epoch):
     total = 0
     for batch_idx, (torch_inputs, torch_targets) in enumerate(trainloader):
 
-        inputs = flow.tensor(torch_inputs.numpy(), requires_grad=True)
-        targets = flow.tensor(torch_targets.numpy(), requires_grad=True)
+        inputs = flow.tensor(torch_inputs.numpy(), requires_grad=False)
+        targets = flow.tensor(torch_targets.numpy(), requires_grad=False)
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = net(inputs)

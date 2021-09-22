@@ -105,7 +105,7 @@ qconfig = {
     'quantization_bit': 8, 
     'quantization_scheme': "symmetric", 
     'quantization_formula': "google", 
-    'per_layer_quantization': True,
+    'per_layer_quantization': False,
     'momentum': 0.95,
 }
 
@@ -194,7 +194,7 @@ def test(epoch):
         best_acc = acc
 
 
-for epoch in range(start_epoch, start_epoch+200):
+for epoch in range(start_epoch, start_epoch+1):
     train(epoch)
     test(epoch)
     scheduler.step()

@@ -61,8 +61,8 @@ The `momentum` parameter in the `MovingAverageMinMaxObserver` class defaults to 
 ## Accuracy
 | Model             | quantization_bit | quantization_scheme | quantization_formula | per_layer_quantization | Acc |
 | ----------------- | ----------- | ----------- | ----------- | ----------- | ----------- |
-| ResNet18          |       |        |        |        |        | 
-| ResNet18          |       |        |        |        |        | 
+| ResNet18          |  8     |  symmetric      | google       |   True     |  95.19%      | 
+| ResNet18          |  8     |  symmetric      | google       |   False    |        | 
 | ResNet18          |       |        |        |        |        | 
 | ResNet18          |       |        |        |        |        | 
 | ResNet18          |       |        |        |        |        | 
