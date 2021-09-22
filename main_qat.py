@@ -103,9 +103,9 @@ net = ResNet18()
 gm: flow.fx.GraphModule = flow.fx.symbolic_trace(net)
 qconfig = {
     'quantization_bit': 8, 
-    'quantization_scheme': "symmetric", 
+    'quantization_scheme': "affine", 
     'quantization_formula': "google", 
-    'per_layer_quantization': False,
+    'per_layer_quantization': True,
     'momentum': 0.95,
 }
 
