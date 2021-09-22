@@ -105,7 +105,7 @@ qconfig = {
     'quantization_bit': 8, 
     'quantization_scheme': "affine", 
     'quantization_formula': "google", 
-    'per_layer_quantization': True,
+    'per_layer_quantization': False,
     'momentum': 0.95,
 }
 
