@@ -65,7 +65,7 @@ The `momentum` parameter in the `MovingAverageMinMaxObserver` class defaults to 
 | ResNet18          |  8     |  symmetric      | google       |   False    |  95.24%      | 
 | ResNet18          |  8     |  affine         | google       |   True     |  95.32%      | 
 | ResNet18          |  8     |  affine         | google       |   False    |  95.30%      | 
-| ResNet18          |  8     |  symmetric      | cambricon    |   True     |        | 
+| ResNet18          |  8     |  symmetric      | cambricon    |   True     |  95.19%      |
 
 ## Reference
 - https://github.com/kuangliu/pytorch-cifar
