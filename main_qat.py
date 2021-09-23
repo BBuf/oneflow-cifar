@@ -103,15 +103,14 @@ net = ResNet18()
 gm: flow.fx.GraphModule = flow.fx.symbolic_trace(net)
 qconfig = {
     'quantization_bit': 8, 
-    'quantization_scheme': "affine", 
-    'quantization_formula': "google", 
-    'per_layer_quantization': False,
+    'quantization_scheme': "symmetric", 
+    'quantization_formula': "cambricon", 
+    'per_layer_quantization': True,
     'momentum': 0.95,
 }
 
 net = quantization_aware_training(gm, flow.randn(1, 3, 32, 32), qconfig)
 net = net.to(device)
-print(net)
 
 if args.resume:
     # Load checkpoint.
