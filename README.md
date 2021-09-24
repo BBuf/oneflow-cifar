@@ -21,8 +21,8 @@ python main.py --resume --lr=0.01
 | [VGG16](https://arxiv.org/abs/1409.1556)              | 93.92%|
 | [ResNet18](https://arxiv.org/abs/1512.03385)          | 95.62%|
 | [ResNet50](https://arxiv.org/abs/1512.03385)          |       |
-| [ResNet101](https://arxiv.org/abs/1512.03385)         | 95.10%|
-| [RegNetX_200MF](https://arxiv.org/abs/2003.13678)     |       |
+| [ResNet101](https://arxiv.org/abs/1512.03385)         |       |
+| [RegNetX_200MF](https://arxiv.org/abs/2003.13678)     | 95.10%|      |
 | [RegNetY_400MF](https://arxiv.org/abs/2003.13678)     |       |
 | [MobileNetV2](https://arxiv.org/abs/1801.04381)       |       |
 | [ResNeXt29(32x4d)](https://arxiv.org/abs/1611.05431)  |       |
