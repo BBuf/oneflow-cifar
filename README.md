@@ -24,7 +24,7 @@ python main.py --resume --lr=0.01
 | [ResNet101](https://arxiv.org/abs/1512.03385)         |       |
 | [RegNetX_200MF](https://arxiv.org/abs/2003.13678)     | 95.10%|
 | [RegNetY_400MF](https://arxiv.org/abs/2003.13678)     |       |
-| [MobileNetV2](https://arxiv.org/abs/1801.04381)       |       |
+| [MobileNetV2](https://arxiv.org/abs/1801.04381)       | 92.56%|
 | [ResNeXt29(32x4d)](https://arxiv.org/abs/1611.05431)  |       |
 | [ResNeXt29(2x64d)](https://arxiv.org/abs/1611.05431)  |       |
 | [SimpleDLA](https://arxiv.org/abs/1707.064)           |       |
