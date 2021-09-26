@@ -20,7 +20,7 @@ python main.py --resume --lr=0.01
 | ----------------- | ----------- |
 | [VGG16](https://arxiv.org/abs/1409.1556)              | 93.92%|
 | [ResNet18](https://arxiv.org/abs/1512.03385)          | 95.62%|
-| [ResNet50](https://arxiv.org/abs/1512.03385)          |       |
+| [ResNet50](https://arxiv.org/abs/1512.03385)          | 95.40 |
 | [ResNet101](https://arxiv.org/abs/1512.03385)         |       |
 | [RegNetX_200MF](https://arxiv.org/abs/2003.13678)     | 95.10%|
 | [RegNetY_400MF](https://arxiv.org/abs/2003.13678)     |       |
