@@ -1,4 +1,5 @@
 '''Train CIFAR10 with OneFlow.'''
+from cgitb import enable
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.optim as optim
@@ -114,6 +115,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=args.lr,
                       momentum=0.9, weight_decay=5e-4)
 scheduler = flow.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+scaler = flow.cuda.amp.GradScaler()
 
 def calc_correct_num(preds, labels):
     correct_of = 0.0
@@ -136,10 +138,16 @@ def train(epoch):
         targets = flow.tensor(torch_targets.numpy(), requires_grad=False)
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
-        outputs = net(inputs)
-        loss = criterion(outputs, targets)
-        loss.backward()
-        optimizer.step()
+
+        with flow.cuda.amp.autocast():
+            outputs = net(inputs)
+            loss = criterion(outputs, targets)
+        
+        scaler.scale(loss).backward()
+        scaler.unscale_(optimizer)
+        flow.nn.utils.clip_grad_norm_(net.parameters(), max_norm=10.0)
+        scaler.step(optimizer)
+        scaler.update()
 
         train_loss += loss.item()
         # _, predicted = outputs.max(1)
@@ -151,9 +159,8 @@ def train(epoch):
         progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
-    # with open('resnet18_cifar10_loss_fp32.txt', 'a') as f:
+    # with open('resnet18_cifar10_loss_fp16.txt', 'a') as f:
     #     f.write(str(train_loss) + '\n')
-
 
 def test(epoch):
     global best_acc
