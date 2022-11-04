@@ -85,8 +85,8 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer',
 # Model
 print('==> Building model..')
 # net = VGG('VGG16')
-net = ResNet18()
-# net = ResNet50()
+# net = ResNet18()
+net = ResNet50()
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
@@ -143,11 +143,11 @@ def train(epoch):
             outputs = net(inputs)
             loss = criterion(outputs, targets)
         
-        scaler.scale(loss).backward()
-        scaler.unscale_(optimizer)
-        flow.nn.utils.clip_grad_norm_(net.parameters(), max_norm=10.0)
-        scaler.step(optimizer)
-        scaler.update()
+        # scaler.scale(loss).backward()
+        # scaler.unscale_(optimizer)
+        # flow.nn.utils.clip_grad_norm_(net.parameters(), max_norm=10.0)
+        # scaler.step(optimizer)
+        # scaler.update()
 
         train_loss += loss.item()
         # _, predicted = outputs.max(1)
