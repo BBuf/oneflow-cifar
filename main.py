@@ -3,7 +3,6 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.optim as optim
 import oneflow.nn.functional as F
-import oneflow.backends.cudnn as cudnn
 
 import torch
 import torchvision
@@ -22,7 +21,7 @@ parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 args = parser.parse_args()
 
-device = 'cuda' if flow.cuda.is_available() else 'cpu'
+device = 'mlu'
 best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 
@@ -84,8 +83,8 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer',
 # Model
 print('==> Building model..')
 # net = VGG('VGG16')
-net = ResNet18()
-# net = ResNet50()
+# net = ResNet18()
+net = ResNet50()
 # net = PreActResNet18()
 # net = GoogLeNet()
 # net = DenseNet121()
