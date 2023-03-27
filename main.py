@@ -145,7 +145,7 @@ def train(epoch):
         predicted = flow.argmax(outputs, 1).to(flow.int64)
         total += targets.size(0)
 
-        correct += predicted.eq(targets).to(flow.int32).sum().item()
+        correct += predicted.eq(targets).sum().item()
 
         progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
@@ -174,7 +174,7 @@ def test(epoch):
             total += targets.size(0)
 
             
-            correct += predicted.eq(targets).to(flow.int32).sum().item()
+            correct += predicted.eq(targets).sum().item()
 
             progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
